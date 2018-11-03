@@ -99,19 +99,73 @@
   //
   // 1) Add an empty dropdown menu (ie: <select></select>) to the <div id="selectBreedContainer"> element.
   //
+  $('<select id="takeInput"></select>').appendTo('#selectBreedContainer')
+
   // 2) Using a *different* jQuery AJAX method than you used in the above example, make a
   //    GET request to https://dog.ceo/api/breeds/list when the page first loads.
   //
   //    For example, if you used $.getJSON() above, try out $.ajax() for this exercise.
   //
   //    Hint: check out the $.ready() method https://api.jquery.com/ready/
-  //
+
+  const dogBreedListURL = 'https://dog.ceo/api/breeds/list'
+
+  const ajaxOptions = {
+    url: dogBreedListURL,
+    method: 'GET',
+    dataType: 'JSON',
+    success: receiveListData,
+    error: failedToLoadData
+  }
+
+  function fetchBreedList () {
+    console.info('the page has loaded. fetching the data now...')
+    $.ajax(ajaxOptions)
+  }
+
+  function failedToLoadData () {
+    console.error('opps! problem wtih the AJAX request')
+  }
+
+  function receiveListData (data) {
+    console.log('receive data of dog list')
+    $(makeoption(data.message)).appendTo('select')
+    $('select').change(function () { getBreedImg()})
+    // $('select').change(function () { alert('changing') })
+  }
+
+  function makeoption (x) {
+    console.log('making breedoptions')
+    let html = ''
+    for (let i = 0; i < x.length; i++) {
+      html += '<option value="' + x[i] + '">' + x[i] + '</option>'
+    }
+    return html
+  }
+
+  function getBreedImg () {
+    console.log('getting data through specific breed URL')
+    let breedname = document.getElementById('takeInput').value
+    let fetchbreedImgURL = 'https://dog.ceo/api/breed/' + breedname + '/images/random'
+    $.getJSON(fetchbreedImgURL, receiveBreedImg)
+  }
+
+  function receiveBreedImg (data) {
+    console.log('receive selected breed data')
+    console.info(data.message)
+    let html = '<img src=' + data.message + ' />'
+    $(html).appendTo('#selectBreedContainer')
+  }
+
+  $(fetchBreedList)
+
   // 3) Confirm that this AJAX request shows up in the Network tab everytime you reload the page
-  //
+  //      DONE
   // 4) In the callback function for that GET request there should be an array of dog breeds.
   //    For each breed, add an <option value="poodle">Poodle</option> to your <select> menu.
   //
   //    Your drop down list should now contain a list of dog breeds.
+  // DONE
   //
   // 5) Add a "change" event to the <select> element using $.on() http://api.jquery.com/on/
   //
@@ -127,19 +181,6 @@
   //
   //    You should now be able to view random pictures of specific dog breeds via the menu!
   //
-
-  // TODO: your code goes here :)
-
-  $('#selectBreedContainer').click(selectbreed)
-  const breedlink = 'https://dog.ceo/api/breeds/list'
-  function receiveSelectBreedData () {
-    console.log('you are checking dog breed! fetching the JSON now')
-    $.ajax(breedlink)
-  }
-
-
-  const selectBreedContainerEl = document.getElementById('selectBreedContainer')
-  selectBreedContainerEl.innerHTML = '<select></select>'
 
   //
   // Excellent work!
