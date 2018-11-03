@@ -140,29 +140,6 @@
 
   const selectBreedContainerEl = document.getElementById('selectBreedContainer')
   selectBreedContainerEl.innerHTML = '<select></select>'
-// -----
-  $('#generateDoggoBtn').click(clickDoggoBtn)
-
-  const randomDogURL = 'https://dog.ceo/api/breeds/image/random'
-
-  function clickDoggoBtn () {
-    console.log('you clicked the doggo button! fetchingthe JSON now')
-    $.getJSON(randomDogURL, receiveData)
-  }
-
-  function receiveData (data) {
-    console.log('Receive data of randomdog:')
-    console.log(data)
-
-    function html () {
-      return `<img src=${data.message} />`
-    }
-
-    // let's add that HTMl into the DOM
-    const doggoContainerEl = document.getElementById('doggoContainer')
-    doggoContainerEl.innerHTML = html()
-  }
-
 
   //
   // Excellent work!
